@@ -17,6 +17,7 @@ define dns::view (
   Boolean              $include_localzones   = true,
   Boolean              $include_defaultzones = true,
   String               $order                = '-',
+  String               $group                = $dns::group,
 ) {
 
   unless $dns::enable_views {
@@ -33,7 +34,7 @@ define dns::view (
 
   concat { $viewconfigfile:
     owner  => root,
-    group  => $dns::params::group,
+    group  => $group,
     mode   => '0640',
     notify => Service[$dns::namedservicename],
   }

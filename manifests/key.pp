@@ -23,14 +23,16 @@ define dns::key(
   Optional[String]     $secret       = undef,
   Stdlib::Absolutepath $keydir       = $dns::dnsdir,
   Integer              $keysize      = 512,
+  String               $group        = $dns::group,
+  String               $user         = $dns::user,
 ) {
   $keyfilename = "${keydir}/${filename}"
 
   if $secret {
     file {$keyfilename:
       ensure  => file,
-      owner   => $dns::user,
-      group   => $dns::group,
+      owner   => $user,
+      group   => $group,
       mode    => '0640',
       content => template('dns/key.erb'),
       notify  => Service[$dns::namedservicename],
@@ -42,7 +44,7 @@ define dns::key(
       notify  => Service[$dns::namedservicename],
     }-> file { $keyfilename:
       owner => 'root',
-      group => $dns::params::group,
+      group => $group,
       mode  => '0640',
     }
   }

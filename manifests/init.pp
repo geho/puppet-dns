@@ -110,6 +110,8 @@ class dns (
   Boolean $enable_views                                             = $dns::params::enable_views,
   Hash[String, Hash] $zones                                         = $dns::params::zones,
   Hash[String, Hash] $keys                                          = $dns::params::keys,
+  String $group                                                     = $dns::params::group,
+  String $user                                                      = $dns::params::user,
 ) inherits dns::params {
 
   include dns::install

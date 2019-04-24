@@ -1,11 +1,14 @@
 # Configure dns
 # @api private
-class dns::config {
-  group { $dns::params::group: }
+class dns::config (
+  String $group = $dns::group,
+  String $user  = $dns::user,
+) {
+  #group { $group: }
 
   concat { $dns::publicviewpath:
     owner => root,
-    group => $dns::params::group,
+    group => $group,
     mode  => '0640',
   }
 
@@ -13,7 +16,7 @@ class dns::config {
     file { $dns::viewconfigpath:
       ensure => directory,
       owner  => root,
-      group  => $dns::params::group,
+      group  => $group,
       mode   => '0755',
     }
   }
@@ -25,7 +28,7 @@ class dns::config {
 
   concat { [$dns::namedconf_path, $dns::optionspath]:
     owner => root,
-    group => $dns::params::group,
+    group => $group,
     mode  => '0640',
   }
 
@@ -43,8 +46,8 @@ class dns::config {
 
   file { $dns::zonefilepath:
     ensure => directory,
-    owner  => $dns::params::user,
-    group  => $dns::params::group,
+    owner  => $user,
+    group  => $group,
     mode   => '0640',
   }
 
@@ -54,7 +57,7 @@ class dns::config {
   }
   -> file { $dns::rndckeypath:
     owner => 'root',
-    group => $dns::params::group,
+    group => $group,
     mode  => '0640',
   }
 }

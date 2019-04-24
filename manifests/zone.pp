@@ -39,6 +39,9 @@ define dns::zone (
   Array $forwarders                                     = [],
   Optional[Enum['yes', 'no', 'explicit']] $dns_notify   = undef,
   Hash[String, Hash[String, Data]] $update_policy_rules = {},
+  String $group                                         = $dns::group,
+  String $user                                          = $dns::user,
+
 ) {
 
   $_contact = pick($contact, "root.${zone}.")
@@ -82,8 +85,8 @@ define dns::zone (
   if $manage_file {
     file { $zonefilename:
       ensure  => file,
-      owner   => $dns::user,
-      group   => $dns::group,
+      owner   => $user,
+      group   => $group,
       mode    => '0644',
       content => template('dns/zone.header.erb'),
       replace => false,
